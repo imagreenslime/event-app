@@ -1,5 +1,22 @@
-cd server
-npm run dev 
+app to search for powerlifting events, as well as tracking, and signing up and dates using 
+-MERN (MongoDB, Express, React, Node)
+-data scraping
+-databasing
+-good UI and UX
+-other skills needed for web development
 
-cd client
-npm start
+HOW TO RUN:
+Express.js is used in back-end and React.js is used in front-end 
+    => seperately run both at the same time then access the front-end's port on local 
+
+create new terminal
+type in commands:
+    cd server
+    npm run dev 
+create new terminal
+type in commands:
+    cd client
+    npm start
+access on front-ends local port (client)
+
+
