@@ -1,9 +1,8 @@
-app to search for powerlifting events, as well as tracking, and signing up and dates using 
+app to search for events, as well as tracking, and signing up and dates using 
 -MERN (MongoDB, Express, React, Node)
 -data scraping
--databasing
+-databases and pagination
 -good UI and UX
--other skills needed for web development
 
 HOW TO RUN:
 Express.js is used in back-end and React.js is used in front-end 
