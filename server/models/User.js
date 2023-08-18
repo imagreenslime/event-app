@@ -4,7 +4,10 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        trim: true,
+        minlength: 3,
     },
     roles: {
         User: {
@@ -21,4 +24,4 @@ const userSchema = new Schema({
     refreshToken: String
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Users', userSchema);

@@ -1,6 +1,4 @@
-
-const scrapers = require('./scrapers.js')
-
-scrapers.scrapeProduct('https://uspa.net/upcoming-events/').then(() => (
-    console.log(scrapers.events)
-))
+let hello = '345 SW Cyber Dr UNIT 105, Bend, OR, United States'
+hello = hello.split(',');
+hello = hello.splice(-2).join(',');
+console.log(hello)

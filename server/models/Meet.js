@@ -10,14 +10,20 @@ const meetSchema = new Schema({
         type: String,
         required: true
     },
+    state: {
+        type: String,
+        required: true,
+    },
     address: {
         type: String,
-        required: true
     },
     date: {
-        type: String,
+        type: String, // turn into date and start and end
         required: true
     },
+    // links
+    // 
 })
 
-module.exports = mongoose.model('Meet', meetSchema)
+const meetModel = mongoose.model('Meets', meetSchema)
+module.exports = meetModel 

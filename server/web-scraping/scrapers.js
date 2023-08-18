@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const events = []
-
+const dateFunctions = require('./dateFunctions');
 // placeholder is replaced with the index as it is what seperates the divs
 const federationInfo = [
     {
@@ -15,7 +15,7 @@ const federationInfo = [
     federation: "USAPL",
     link: 'https://www.usapowerlifting.com/calendar/',
     name: '/html/body/div[3]/div/div[2]/div/div[1]/div/div/div/div/div/div/div/div/div/div/div[placeholder]/div[1]/h4/a/span/div/div[2]',
-    gym: '/html/body/div[3]/div/div[2]/div/div[1]/div/div/div/div/div/div/div/div/div/div/div[placeholder]/div[2]/div/div/div[2]/text()[3]',
+    address: '/html/body/div[3]/div/div[2]/div/div[1]/div/div/div/div/div/div/div/div/div/div/div[placeholder]/div[2]/div/div/div[2]/text()[3]',
     date: '/html/body/div[3]/div/div[2]/div/div[1]/div/div/div/div/div/div/div/div/div/div/div[placeholder]/div[1]/h4/a/span/div/div[3]'
 }
 ]
@@ -26,36 +26,39 @@ async function scrapeProduct(federationInfo) {
     await page.goto(federationInfo.link);
 
     for (let i=1; i < 16; i++){
-        let rawName = "";
-        let rawGym = "";
-        let rawAddress = "";
-        let rawDate = "";
-        if (federationInfo.name){
-            rawName = await getText(page, federationInfo.name.replace("placeholder", i))
-        }
+        let rawName;
+        let rawGym;
+        let rawAddress;
+        let rawDate;
+        rawName = await getText(page, federationInfo.name.replace("placeholder", i))
+
         if (federationInfo.gym){
             rawGym = await getText(page, federationInfo.gym.replace("placeholder", i))
         }
-        if (federationInfo.address){
-            rawAddress = await getText(page, federationInfo.address.replace("placeholder", i))
+        rawAddress = await getText(page, federationInfo.address.replace("placeholder", i))
+        rawDate = await getText(page, federationInfo.date.replace("placeholder", i))
+        if (rawDate.includes('-')){
+            let arr = rawDate.split('-');
+            rawDate = arr[0];
         }
-        if (federationInfo.date){
-            rawDate = await getText(page, federationInfo.date.replace("placeholder", i))
-        }
-        if (federationInfo.federation == "USPA"){
-            events.push({
-                federation: federationInfo.federation, 
-                name: rawName.slice(1, -1), 
-                where: `${ rawGym.slice(1, -1) } ${ rawAddress.slice(1, -1) }`, 
-                when: rawDate
-            })
-        } else {
-            events.push({
-                federation: federationInfo.federation, 
-                name: rawName.slice(1, -1), 
-                where: `${rawGym} ${rawAddress}`, 
-                when: rawDate
-            })
+        switch (federationInfo.federation){
+            case "USAPL":
+                events.push({
+                    federation: federationInfo.federation, 
+                    name: rawName, 
+                    state: rawAddress.slice(9) + ", United States",
+                    date: dateFunctions.dateToNumber(rawDate) 
+                })
+                break;
+            case "USPA":
+                events.push({
+                    federation: federationInfo.federation, 
+                    name: rawName.slice(1, -1), 
+                    state: rawAddress.split(',').splice(-2).join(','),
+                    address: `${rawGym} ${rawAddress}`,  
+                    date: dateFunctions.dateToNumber(dateFunctions.getCurrentYear(rawDate))
+                })
+                break;
         }
     }
 
