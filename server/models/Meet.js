@@ -12,7 +12,6 @@ const meetSchema = new Schema({
     },
     state: {
         type: String,
-        required: true,
     },
     address: {
         type: String,
@@ -21,6 +20,10 @@ const meetSchema = new Schema({
         type: String, // turn into date and start and end
         required: true
     },
+    link: {
+        type: String,
+        required: true
+    }
     // links
     // 
 })

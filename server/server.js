@@ -10,25 +10,42 @@ const app = express();
 
 // connect to mongodb
 connectDB();
-// meetModel.deleteMany({}).then(console.log("hello"));
-function handleEvents(event){
-    meetModel.exists({name: event.name})
-    .then((product) => {
-        if (product != null){
-            return;
+//meetModel.deleteMany({}).then(console.log("hello"));
+
+function makeUniqueNames(oldList){
+    const newList = [];
+    oldList.forEach(oldElement => { // the argument passed to the callback stores the current item
+        let unique = true;
+        newList.forEach(newElement => {
+            if (oldElement.name == newElement.name){
+            unique = false;    
+            }
+        });
+        if(unique){
+            newList.push(oldElement);
         }
-        const newMeet = new meetModel({federation: event.federation, name: event.name, state: event.state, address: event.address, date: event.date});
-        newMeet.save()
-        .then(() => console.log(`meet added: ${event.name}`)) 
-        .catch(err => console.log('error: ' + err));
-    })
+    });
+    return newList
+}
+async function handleEvents(event){
+    let exists = await meetModel.findOne({"name": event.name})
+    if (exists){
+        console.log("duplicate")
+        return;
+    }
+    const newMeet = new meetModel({federation: event.federation, name: event.name, state: event.state, address: event.address, date: event.date, link: event.link});
+    newMeet.save()
+    .then(() => console.log(`meet added: ${event.name}`)) 
+    .catch(err => console.log('error: ' + err));
+
 }
 
-//scrapers.initializeFederation().then(() => {
-//    scrapers.events.forEach((event) => { 
-//        handleEvents(event);
-//    })
-//})
+scrapers.initializeFederation().then(() => {
+    let newEvents = makeUniqueNames(scrapers.events)
+    newEvents.forEach((event) => { 
+        handleEvents(event);
+    })
+})
 
 // update events with whatever testing before database
 

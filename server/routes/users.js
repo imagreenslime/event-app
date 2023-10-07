@@ -1,3 +1,5 @@
+// not in use currently - no need for users
+
 const express = require('express')
 const router = express.Router()
 let User = require('../models/User')
