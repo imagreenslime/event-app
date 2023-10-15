@@ -26,7 +26,16 @@ const federationInfo = [
     eventLink: '/html/body/div[1]/main/div/div/div[2]/div[placeholder]/div[2]/article/div[2]/header/h3/a',
     address: '/html/body/div[1]/main/div/div/div[2]/div[placeholder]/div[2]/article/div[2]/header/address/span[2]',
     date: '/html/body/div[1]/main/div/div/div[2]/div[placeholder]/div[2]/article/div[2]/header/div/time/span'
-    }
+    },
+{
+    federation: "WRPF",
+    link: 'https://www.thewrpf.com/events/list/',
+    name: '/html/body/div[2]/div/div/main/article/div/div/div/div[2]/div[placeholder]/div[2]/article/div/header/h3/a',
+    eventLink: '/html/body/div[2]/div/div/main/article/div/div/div/div[2]/div[placeholder]/div[2]/article/div/header/h3/a',
+    address: '/html/body/div[2]/div/div/main/article/div/div/div/div[2]/div[placeholder]/div[2]/article/div/header/address/span[2]',
+    state: '/html/body/div[2]/div/div/main/article/div/div/div/div[2]/div[placeholder]/div[2]/article/div/header/address/span[2]/span',
+    date: '/html/body/div[2]/div/div/main/article/div/div/div/div[2]/div[placeholder]/div[2]/article/div/header/div/time/span',
+}
 ]
 const itemsPerFederation = 80;
 async function scrapeProduct(federationInfo) {
@@ -49,13 +58,16 @@ async function scrapeProduct(federationInfo) {
             await page.goto(federationInfo.link + `page/${pageNumber}/`);
         }
         console.log(k)
-        let rawName, rawLink, rawAddress, rawDate = ""
+        let rawName, rawLink, rawAddress, rawDate, rawState = ""
         // get data
         rawName = await getText(page, federationInfo.name.replace("placeholder", k))
         rawLink = await getLink(page, federationInfo.eventLink.replace("placeholder", k))
         rawAddress = await getText(page, federationInfo.address.replace("placeholder", k))
         rawDate = await getText(page, federationInfo.date.replace("placeholder", k))
 
+        if (federationInfo.state){
+            rawState = await getText(page, federationInfo.state.replace("placeholder", k))
+        }
         // if an event is multiple days then only obtain starting date
         if (rawDate.includes('-')){
             let arr = rawDate.split('-');
@@ -91,6 +103,14 @@ async function scrapeProduct(federationInfo) {
                     link: rawLink
                 })
                 break;    
+            case "WRPF":
+                events.push({
+                    federation: federationInfo.federation, 
+                    name: rawName.trim(),
+                    state: rawState.split(':').slice(-1).join(',').trim(),
+                    date: dateFunctions.dateToNumber(dateFunctions.getCurrentYear(rawDate)),
+                    link: rawLink
+                })
         }
     }
     console.log(`${federationInfo.federation} has been completed ${itemsPerFederation} items`)
@@ -104,6 +124,9 @@ async function handleEventTotal(page, federation){
         case "AMP":
             t1 = await page.$x('//div[@class="tribe-common-g-row tribe-events-calendar-list__event-row"]')
             return t1.length
+        case "WRPF":
+            t1 = await page.$x('//div[@class="tribe-common-g-row tribe-events-calendar-list__event-row"]')
+            return t1.length + 1
         case "USAPL":
             t1 = await page.$x('//div[@class="vc_tta-panel"]')
             return t1.length

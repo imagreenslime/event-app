@@ -1,5 +1,6 @@
 path {
     pointer-events: all;
+    transition: .3s;
 }
 
 path:hover {

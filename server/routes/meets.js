@@ -6,11 +6,11 @@ const federationOptions = [
     "USPA",
     "USAPL",
     "AMP",
+    "WRPF",
 ]
 
 router.get("/", async (req, res) => {
 
-    //const page = req.query.page
     const federation = req.query.federation || ""
     const name = req.query.name || "" // name currently not in use
 

@@ -4,10 +4,10 @@ import { Table } from 'react-bootstrap';
 export default function TableList({meetData}){
     if (meetData.length !== undefined){
         return (
-            <Table>
+            <Table className="table-striped table-bordered table-hover">
             <thead>
                 <tr>
-                <th className="col-1">Federation</th>
+                <th className="">Federation</th>
                 <th className="col-8">Name</th>
                 <th className="col-1">When</th>
                 <th className="col-2">State</th>
