@@ -21,7 +21,7 @@ app.use('/meets', meetRouter);
 const userRouter = require('./routes/users');
 app.use('/users', userRouter);
 
-deleteEvents();
+// deleteEvents();
 initializeEvents();
 
 mongoose.connection.once('open', () => {
