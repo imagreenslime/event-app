@@ -18,15 +18,16 @@ connectDB();
 const meetRouter = require('./routes/meets');
 app.use('/meets', meetRouter);
 
-const userRouter = require('./routes/users');
-app.use('/users', userRouter);
+//const userRouter = require('./routes/users');
+//app.use('/users', userRouter);
 
 // deleteEvents();
-initializeEvents();
+// initializeEvents();
 
 mongoose.connection.once('open', () => {
     console.log("Connected to MongoDB");
     app.listen(3000, () => {console.log("server on port 3000")});
 })
 
+// app.listen(3000, () => {console.log("server on port 3000")});
 // 2cpAkdt6rDyNxdYf

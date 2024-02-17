@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const events = []
 const dateFunctions = require('./dateFunctions');
 // placeholder is replaced with the index as it is what seperates the divs
+// USPA WEBSITE CHANGED FIX THIS
 const federationInfo = [
     {
     federation: "USPA", 
@@ -37,9 +38,9 @@ const federationInfo = [
     date: '/html/body/div[2]/div/div/main/article/div/div/div/div[2]/div[placeholder]/div[2]/article/div/header/div/time/span',
 }
 ]
-const itemsPerFederation = 80;
+const itemsPerFederation = 20;
 async function scrapeProduct(federationInfo) {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({headless: "new"})
     const page = await browser.newPage()
     await page.goto(federationInfo.link);
 
