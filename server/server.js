@@ -28,6 +28,7 @@ mongoose.connection.once('open', () => {
     console.log("Connected to MongoDB");
     app.listen(3000, () => {console.log("server on port 3000")});
 })
-
+//console.log("Connected to MongoDB");
+//app.listen(3000, () => {console.log("server on port 3000")});
 // app.listen(3000, () => {console.log("server on port 3000")});
 // 2cpAkdt6rDyNxdYf
